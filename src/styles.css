@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html body {
+    @apply bg-slate-950 text-slate-50 font-display antialiased;
+    background: radial-gradient(circle at 10% 20%, rgba(123, 155, 255, 0.18), transparent 32%),
+      radial-gradient(circle at 90% 10%, rgba(95, 245, 206, 0.15), transparent 28%),
+      linear-gradient(145deg, #05070f, #090c18 40%, #060814);
+  }
+
+  a {
+    @apply transition-colors;
+  }
+}
+
+@layer components {
+  .card-sheen {
+    @apply bg-gradient-to-b from-white/5 via-white/10 to-white/5 border border-white/10 shadow-glow;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-slate-200;
+  }
+
+  .section-heading {
+    @apply flex flex-col gap-2 md:flex-row md:items-end md:justify-between;
+  }
+
+  .markdown h2 {
+    @apply text-2xl font-semibold mt-6 mb-3;
+  }
+
+  .markdown h3 {
+    @apply text-xl font-semibold mt-5 mb-2;
+  }
+
+  .markdown p {
+    @apply text-slate-200 leading-relaxed mb-3;
+  }
+
+  .markdown ul {
+    @apply list-disc pl-5 space-y-2 mb-4 text-slate-200;
+  }
+
+  .markdown code {
+    @apply rounded bg-slate-900/80 px-1.5 py-0.5 text-sm text-slate-100;
+  }
+
+  .markdown pre {
+    @apply bg-slate-900/90 border border-white/10 rounded-xl p-4 overflow-auto mb-5;
+  }
+}

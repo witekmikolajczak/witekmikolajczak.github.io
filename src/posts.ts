@@ -1,4 +1,6 @@
-export const posts = [
+import { BlogPost } from './types';
+
+export const posts: BlogPost[] = [
   {
     slug: 'hardening-react-native-pipelines',
     title: 'Hardening React Native pipelines',

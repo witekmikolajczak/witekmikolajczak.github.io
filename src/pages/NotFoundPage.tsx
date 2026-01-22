@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'flowbite-react';
 import { motion } from 'framer-motion';
@@ -10,11 +9,7 @@ const quickLinks = [
   { label: 'Blog', to: '/blog' },
 ];
 
-/**
- * Renders a 404 fallback for unknown routes.
- * @returns {JSX.Element}
- */
-export default function NotFoundPage() {
+export default function NotFoundPage(): JSX.Element {
   return (
     <main className="space-y-8">
       <motion.section
@@ -42,7 +37,7 @@ export default function NotFoundPage() {
         </motion.div>
         <motion.div className="flex flex-wrap items-center gap-3" variants={fadeUp}>
           <Link to="/">
-            <Button gradientDuoTone="purpleToBlue" className="shadow-glow">
+            <Button color="purple" className="shadow-glow">
               Back home
             </Button>
           </Link>

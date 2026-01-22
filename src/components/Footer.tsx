@@ -1,12 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'flowbite-react';
 
-/**
- * Site footer with brand mark and primary calls to action.
- * @returns {JSX.Element}
- */
-export default function Footer() {
+export default function Footer(): JSX.Element {
   return (
     <footer className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur md:flex-row md:items-center md:justify-between">
       <div className="flex items-center gap-3">
@@ -29,7 +24,7 @@ export default function Footer() {
       </div>
       <div className="flex gap-2">
         <a href="mailto:witekmikolajczak@gmail.com">
-          <Button gradientDuoTone="purpleToBlue" className="shadow-glow">
+          <Button color="purple" className="shadow-glow">
             Start a project
           </Button>
         </a>

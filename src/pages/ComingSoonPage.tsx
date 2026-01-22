@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'flowbite-react';
 import { motion } from 'framer-motion';
@@ -26,11 +25,7 @@ const workbenchNotes = [
   'Packaging reusable checklists, templates, and architecture diagrams for download.',
 ];
 
-/**
- * Renders a coming-soon placeholder for the blog route.
- * @returns {JSX.Element}
- */
-export default function ComingSoonPage() {
+export default function ComingSoonPage(): JSX.Element {
   return (
     <main className="space-y-8">
       <motion.section
@@ -81,7 +76,7 @@ export default function ComingSoonPage() {
         </motion.div>
         <motion.div className="flex flex-wrap items-center gap-3" variants={fadeUp}>
           <Link to="/projects">
-            <Button gradientDuoTone="purpleToBlue" className="shadow-glow">
+            <Button color="purple" className="shadow-glow">
               Browse projects
             </Button>
           </Link>

@@ -1,15 +1,14 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Badge } from 'flowbite-react';
 import { motion } from 'framer-motion';
 import { fadeUp } from '../animations';
+import { Project } from '../types';
 
-/**
- * Project card for list/grid views.
- * @param {{ project: import('../projects').projects[number] }} props
- * @returns {JSX.Element}
- */
-export default function ProjectCard({ project }) {
+interface ProjectCardProps {
+  project: Project;
+}
+
+export default function ProjectCard({ project }: ProjectCardProps): JSX.Element {
   const hasHeroImage = Boolean(project.heroImage);
   const heroClass = hasHeroImage
     ? 'relative overflow-hidden rounded-xl border border-white/10'

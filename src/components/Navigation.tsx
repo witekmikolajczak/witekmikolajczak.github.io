@@ -1,11 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-/**
- * Primary site navigation with brand logo and top-level links.
- * @returns {JSX.Element}
- */
-export default function Navigation() {
+export default function Navigation(): JSX.Element {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);

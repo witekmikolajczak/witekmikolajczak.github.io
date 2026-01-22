@@ -1,11 +1,16 @@
-import React from 'react';
+interface SectionHeaderProps {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  alignment?: 'start' | 'between';
+}
 
-/**
- * Renders a compact section header with title and optional description.
- * @param {{ eyebrow?: string, title: string, description?: string, alignment?: 'start' | 'between' }} props
- * @returns {JSX.Element}
- */
-export default function SectionHeader({ eyebrow, title, description, alignment = 'between' }) {
+export default function SectionHeader({
+  eyebrow,
+  title,
+  description,
+  alignment = 'between',
+}: SectionHeaderProps): JSX.Element {
   const layoutClass = alignment === 'start' ? 'items-start' : 'md:items-end md:justify-between';
   return (
     <div className={`section-heading ${layoutClass}`}>

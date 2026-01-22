@@ -1,15 +1,14 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Badge } from 'flowbite-react';
 import { motion } from 'framer-motion';
 import { fadeUp } from '../animations';
+import { BlogPost } from '../types';
 
-/**
- * Blog list card.
- * @param {{ post: import('../posts').posts[number] }} props
- * @returns {JSX.Element}
- */
-export default function BlogCard({ post }) {
+interface BlogCardProps {
+  post: BlogPost;
+}
+
+export default function BlogCard({ post }: BlogCardProps): JSX.Element {
   return (
     <motion.article
       className="card-sheen rounded-2xl px-4 py-4"

@@ -1,11 +1,11 @@
-import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Badge, Button } from 'flowbite-react';
 import { motion } from 'framer-motion';
 import { fadeUp, staggerUp } from '../animations';
 import { projects } from '../projects';
+import { Project, ProjectLinkIcon } from '../types';
 
-const linkIcons = {
+const linkIcons: Record<ProjectLinkIcon, JSX.Element> = {
   play: (
     <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
       <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1.5" />
@@ -53,18 +53,14 @@ const linkIcons = {
   ),
 };
 
-function LinkIcon({ name }) {
+function LinkIcon({ name = 'link' }: { name?: ProjectLinkIcon }): JSX.Element {
   return linkIcons[name] ?? linkIcons.link;
 }
 
-/**
- * Project detail view with hero, contributions, and supporting links.
- * @returns {JSX.Element}
- */
-export default function ProjectDetailPage() {
-  const { slug } = useParams();
+export default function ProjectDetailPage(): JSX.Element {
+  const { slug } = useParams<{ slug: string }>();
   const project = projects.find((p) => p.slug === slug);
-  const links = project?.links ?? [];
+  const links: Project['links'] = project?.links ?? [];
 
   if (!project) {
     return (
@@ -80,7 +76,8 @@ export default function ProjectDetailPage() {
     );
   }
 
-  const hasHeroImage = Boolean(project.heroImage);
+  const heroImage = project.heroImage;
+  const hasHeroImage = Boolean(heroImage);
   const heroContainerClass = hasHeroImage
     ? 'card-sheen relative overflow-hidden rounded-2xl border border-white/10 p-6 text-slate-50'
     : `card-sheen rounded-2xl border border-white/10 bg-gradient-to-r ${project.heroColor} p-6 text-slate-900`;
@@ -96,10 +93,10 @@ export default function ProjectDetailPage() {
         viewport={{ once: true, amount: 0.2 }}
       >
         <motion.div className={heroContainerClass} variants={fadeUp}>
-          {hasHeroImage ? (
+          {heroImage ? (
             <>
               <img
-                src={project.heroImage}
+                src={heroImage}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover"
                 aria-hidden="true"
@@ -179,22 +176,16 @@ export default function ProjectDetailPage() {
             <p className="text-slate-300">App stores, SDK packages, and demos.</p>
           </div>
           <div className="grid gap-3 md:grid-cols-2">
-            {links.map((link) => {
-              const isActive = Boolean(link.href);
-              const MotionWrapper = isActive ? motion.a : motion.div;
-              const wrapperProps = isActive
-                ? { href: link.href, target: '_blank', rel: 'noreferrer' }
-                : { 'aria-disabled': true };
-              const statusLabel = isActive ? 'Open' : 'Add URL';
-              return (
-                <MotionWrapper
+            {links.map((link) =>
+              link.href ? (
+                <motion.a
                   key={link.label}
-                  className={`card-sheen flex items-start justify-between gap-3 rounded-2xl p-4 transition ${
-                    isActive ? 'hover:border-white/30 hover:bg-white/10' : 'cursor-not-allowed opacity-70'
-                  }`}
+                  className="card-sheen flex items-start justify-between gap-3 rounded-2xl p-4 transition hover:border-white/30 hover:bg-white/10"
                   variants={fadeUp}
-                  whileHover={isActive ? { y: -2, scale: 1.01 } : undefined}
-                  {...wrapperProps}
+                  whileHover={{ y: -2, scale: 1.01 }}
+                  href={link.href}
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   <div className="flex items-start gap-3">
                     <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-mint">
@@ -205,10 +196,28 @@ export default function ProjectDetailPage() {
                       {link.detail ? <p className="text-sm text-slate-400">{link.detail}</p> : null}
                     </div>
                   </div>
-                  <span className="text-xs text-slate-400">{statusLabel}</span>
-                </MotionWrapper>
-              );
-            })}
+                  <span className="text-xs text-slate-400">Open</span>
+                </motion.a>
+              ) : (
+                <motion.div
+                  key={link.label}
+                  className="card-sheen flex items-start justify-between gap-3 rounded-2xl p-4 transition cursor-not-allowed opacity-70"
+                  variants={fadeUp}
+                  aria-disabled
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-mint">
+                      <LinkIcon name={link.icon} />
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-100">{link.label}</p>
+                      {link.detail ? <p className="text-sm text-slate-400">{link.detail}</p> : null}
+                    </div>
+                  </div>
+                  <span className="text-xs text-slate-400">Add URL</span>
+                </motion.div>
+              ),
+            )}
           </div>
         </motion.section>
       ) : null}
@@ -227,7 +236,7 @@ export default function ProjectDetailPage() {
           {project.images.map((image) => (
             <motion.div
               key={image.title}
-              className="flex aspect-[4/3] flex-col rounded-2xl border border-dashed border-white/20 bg-slate-900/60 p-3 text-center text-slate-300 overflow-hidden"
+              className="flex aspect-[4/3] flex-col overflow-hidden rounded-2xl border border-dashed border-white/20 bg-slate-900/60 p-3 text-center text-slate-300"
               variants={fadeUp}
               whileHover={{ y: -4, scale: 1.01 }}
             >
@@ -247,7 +256,7 @@ export default function ProjectDetailPage() {
               </div>
               <div className="pt-2">
                 <p className="font-semibold text-slate-100">{image.title}</p>
-                <p className="text-sm text-slate-400">{image.note}</p>
+                {image.note ? <p className="text-sm text-slate-400">{image.note}</p> : null}
               </div>
             </motion.div>
           ))}

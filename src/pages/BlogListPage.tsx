@@ -1,11 +1,10 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import SectionHeader from '../components/SectionHeader';
 import BlogCard from '../components/BlogCard';
 import { staggerUp } from '../animations';
 import { posts } from '../posts';
 
-export default function BlogListPage() {
+export default function BlogListPage(): JSX.Element {
   return (
     <main className="space-y-8">
       <motion.section
@@ -18,7 +17,7 @@ export default function BlogListPage() {
         <SectionHeader
           eyebrow="Blog"
           title="Good practices in development"
-          description="Posts live in `src/posts.js` as markdown strings, parsed client-side."
+          description="Posts live in `src/posts.ts` as markdown strings, parsed client-side."
         />
         <div className="grid gap-4 md:grid-cols-2">
           {posts.map((post) => (

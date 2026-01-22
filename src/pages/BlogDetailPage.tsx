@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from 'flowbite-react';
 import { marked } from 'marked';
@@ -6,8 +5,8 @@ import { motion } from 'framer-motion';
 import { fadeUp, staggerUp } from '../animations';
 import { posts } from '../posts';
 
-export default function BlogDetailPage() {
-  const { slug } = useParams();
+export default function BlogDetailPage(): JSX.Element {
+  const { slug } = useParams<{ slug: string }>();
   const post = posts.find((item) => item.slug === slug);
 
   if (!post) {
@@ -48,7 +47,15 @@ export default function BlogDetailPage() {
           </Link>
         </motion.div>
         <motion.article className="card-sheen rounded-2xl px-4 py-5" variants={fadeUp}>
-          <div className="markdown" dangerouslySetInnerHTML={{ __html: marked.parse(post.content) }} />
+          <div
+            className="markdown"
+            dangerouslySetInnerHTML={{
+              __html: (() => {
+                const parsed = marked.parse(post.content);
+                return typeof parsed === 'string' ? parsed : '';
+              })(),
+            }}
+          />
         </motion.article>
       </motion.section>
     </main>

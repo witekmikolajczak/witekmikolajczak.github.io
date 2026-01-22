@@ -1,13 +1,11 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { fadeIn } from '../animations';
+import { Metric } from '../types';
 
-/**
- * Displays a grid of small metrics for the hero area.
- * @param {{ metrics: Array<{ label: string, value: string, accent?: boolean }> }} props
- * @returns {JSX.Element}
- */
-export default function StatsPanel({ metrics }) {
+interface StatsPanelProps {
+  metrics: Metric[];
+}
+
+export default function StatsPanel({ metrics }: StatsPanelProps): JSX.Element {
   return (
     <div className="grid gap-3 md:grid-cols-2">
       {metrics.map((metric) => (

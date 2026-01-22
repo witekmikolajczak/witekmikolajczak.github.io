@@ -1,6 +1,8 @@
+import { Project } from './types';
+
 // Place project screenshots in `public/projects/<slug>/` and set `path` to `/projects/<slug>/<file>`.
 // Optional: add `heroImage` (ex: `/projects/<slug>/hero.png`) to use an image in the project hero.
-export const projects = [
+export const projects: Project[] = [
   {
     slug: 'empeiria-wallet',
     name: 'Empeiria Wallet',

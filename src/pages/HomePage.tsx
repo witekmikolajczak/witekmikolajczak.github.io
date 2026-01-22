@@ -1,16 +1,16 @@
-import React from 'react';
 import { Button, Badge } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { fadeUp, fadeIn, staggerUp } from '../animations';
+import { fadeUp, staggerUp } from '../animations';
 import { projects } from '../projects';
 import SectionHeader from '../components/SectionHeader';
 import StatsPanel from '../components/StatsPanel';
 import ProjectCarousel from '../components/ProjectCarousel';
+import { Metric } from '../types';
 
-const photoUrl = './profile.png'; // Replace with import or URL for your headshot.
+const photoUrl = '/profile.png';
 
-const heroMetrics = [
+const heroMetrics: Metric[] = [
   { label: 'Build time', value: '~22s' },
   { label: 'Coverage', value: '87%' },
   { label: 'Incidents', value: '0 Sev-1', accent: true },
@@ -89,7 +89,7 @@ const signals = [
   },
 ];
 
-export default function HomePage() {
+export default function HomePage(): JSX.Element {
   const navigate = useNavigate();
 
   const scrollToProjects = () => {
@@ -120,7 +120,7 @@ export default function HomePage() {
             services that are observable and production-ready.
           </motion.p>
           <motion.div className="flex flex-wrap items-center gap-3" variants={fadeUp}>
-            <Button gradientDuoTone="purpleToBlue" className="shadow-glow" onClick={scrollToProjects}>
+            <Button color="purple" className="shadow-glow" onClick={scrollToProjects}>
               View projects
             </Button>
             <Button color="gray" outline onClick={() => navigate('/blog')}>

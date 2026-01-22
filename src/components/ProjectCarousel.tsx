@@ -1,21 +1,23 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { fadeUp } from '../animations';
+import { Project } from '../types';
 
-const positionStyles = {
+type SlidePosition = 'center' | 'right' | 'left' | 'hidden';
+
+const positionStyles: Record<SlidePosition, { x: string; scale: number; zIndex: number; opacity: number }> = {
   center: { x: '0%', scale: 1, zIndex: 30, opacity: 1 },
   right: { x: '32%', scale: 0.88, zIndex: 20, opacity: 0.55 },
   left: { x: '-32%', scale: 0.88, zIndex: 20, opacity: 0.55 },
   hidden: { x: '0%', scale: 0.7, zIndex: 10, opacity: 0 },
 };
 
-/**
- * Carousel for featured projects on the home page (infinite, 3 visible with center emphasis).
- * @param {{ projects: import('../projects').projects }} props
- * @returns {JSX.Element}
- */
-export default function ProjectCarousel({ projects }) {
+interface ProjectCarouselProps {
+  projects: Project[];
+}
+
+export default function ProjectCarousel({ projects }: ProjectCarouselProps): JSX.Element {
   const [index, setIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(() =>
     typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : true,
@@ -35,8 +37,8 @@ export default function ProjectCarousel({ projects }) {
     return () => media.removeListener(updateMatch);
   }, []);
 
-  const positions = useMemo(() => {
-    return projects.map((_, i) => {
+  const positions = useMemo<SlidePosition[]>(() => {
+    return projects.map((_, i): SlidePosition => {
       if (!isDesktop) {
         return i === index ? 'center' : 'hidden';
       }
@@ -79,8 +81,8 @@ export default function ProjectCarousel({ projects }) {
 
       <div className="relative h-full">
         {projects.map((project, i) => {
-          const posKey = positions[i];
-          const style = positionStyles[posKey] || positionStyles.hidden;
+          const posKey = positions[i] ?? 'hidden';
+          const style = positionStyles[posKey];
           const hasHeroImage = Boolean(project.heroImage);
           const showHeroImage = hasHeroImage && isDesktop;
           const heroClass = showHeroImage

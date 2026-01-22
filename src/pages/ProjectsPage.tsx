@@ -1,11 +1,10 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import SectionHeader from '../components/SectionHeader';
 import ProjectCard from '../components/ProjectCard';
 import { staggerUp } from '../animations';
 import { projects } from '../projects';
 
-export default function ProjectsPage() {
+export default function ProjectsPage(): JSX.Element {
   return (
     <main className="space-y-8">
       <motion.section

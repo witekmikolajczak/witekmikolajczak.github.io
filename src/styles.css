@@ -3,15 +3,42 @@
 @tailwind utilities;
 
 @layer base {
-  html body {
-    @apply bg-slate-950 text-slate-50 font-display antialiased;
-    background: radial-gradient(circle at 10% 20%, rgba(123, 155, 255, 0.18), transparent 32%),
+  :root {
+    --site-bg: radial-gradient(circle at 10% 20%, rgba(123, 155, 255, 0.18), transparent 32%),
       radial-gradient(circle at 90% 10%, rgba(95, 245, 206, 0.15), transparent 28%),
       linear-gradient(145deg, #05070f, #090c18 40%, #060814);
   }
 
+  html {
+    @apply bg-slate-950;
+    background-color: #05070f;
+    min-height: 100%;
+  }
+
+  body {
+    @apply text-slate-50 font-display antialiased;
+    background-color: transparent;
+    min-height: 100vh;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
   a {
     @apply transition-colors;
+  }
+
+  /* Full-viewport background so rubber-band overscroll shows the gradient, not white or flat black */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-color: #05070f;
+    background-image: var(--site-bg);
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 }
 

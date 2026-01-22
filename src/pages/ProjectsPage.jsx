@@ -11,9 +11,8 @@ export default function ProjectsPage() {
       <motion.section
         className="space-y-3"
         variants={staggerUp}
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.2 }}
+        initial={false}
+        animate="animate"
       >
         <SectionHeader
           eyebrow="Projects"

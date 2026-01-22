@@ -227,23 +227,25 @@ export default function ProjectDetailPage() {
           {project.images.map((image) => (
             <motion.div
               key={image.title}
-              className="flex aspect-[4/3] flex-col justify-between rounded-2xl border border-dashed border-white/20 bg-slate-900/60 p-4 text-center text-slate-300"
+              className="flex aspect-[4/3] flex-col rounded-2xl border border-dashed border-white/20 bg-slate-900/60 p-3 text-center text-slate-300 overflow-hidden"
               variants={fadeUp}
               whileHover={{ y: -4, scale: 1.01 }}
             >
-              {image.path ? (
-                <img
-                  src={image.path}
-                  alt={image.title}
-                  className="h-full w-full rounded-xl object-contain"
-                  loading="lazy"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center rounded-xl bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950">
-                  <span className="text-sm">Add screenshot here</span>
-                </div>
-              )}
-              <div className="pt-3">
+              <div className="flex flex-1 items-center justify-center overflow-hidden rounded-xl bg-slate-900/50">
+                {image.path ? (
+                  <img
+                    src={image.path}
+                    alt={image.title}
+                    className="max-h-full max-w-full object-contain"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950">
+                    <span className="text-sm">Add screenshot here</span>
+                  </div>
+                )}
+              </div>
+              <div className="pt-2">
                 <p className="font-semibold text-slate-100">{image.title}</p>
                 <p className="text-sm text-slate-400">{image.note}</p>
               </div>

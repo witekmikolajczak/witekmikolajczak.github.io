@@ -1,0 +1,48 @@
+---
+title: useMemo and useCallback – when they help and when they do not
+slug: react-hooks-memoization
+published: 2026-01-22
+summary: "A clear, beginner-friendly explanation of useMemo and useCallback with guidance on when memoization actually improves performance."
+tags:
+  - react
+  - hooks
+  - performance
+---
+
+## Why these hooks exist
+React re-renders components to keep the UI in sync with data. Sometimes a render triggers expensive calculations or re-renders of children that depend on function props. Memoization can reduce that cost, but only when the work is truly expensive or the child is sensitive to prop identity.
+
+## useMemo — caching heavy calculations
+```tsx
+const visibleItems = useMemo(() => {
+  return items.filter((item) => heavyCheck(item));
+}, [items]);
+```
+- Use it when the calculation is costly or feeds many consumers.
+- Skip it for trivial math; the memoization overhead can outweigh the benefit.
+
+## useCallback — stable function identities
+```tsx
+const handleSelect = useCallback(
+  (id: string) => {
+    setSelected(id);
+  },
+  [setSelected],
+);
+
+return <List items={items} onSelect={handleSelect} />;
+```
+`useCallback` matters when a child component is memoized (e.g., `React.memo`) or uses the function inside `useEffect` dependencies. If the child re-renders regardless, a stable callback brings no gain.
+
+## Common mistakes
+- Adding `useCallback` everywhere “just in case” — it adds complexity without improving speed if children are not memoized.
+- Leaving the dependency array empty while reading variables from the outer scope — that freezes the callback with stale values. Include every value you read.
+
+## When to skip memoization
+- Small components without heavy computations or memoized children.
+- Performance bottlenecks caused by I/O or fetching rather than rendering.
+
+## Practical checklist
+- Is the computation or child render expensive? If yes, consider `useMemo`/`useCallback`.
+- Are dependencies complete? Let the rules-of-hooks ESLint rule guide you.
+- Did profiling show a real gain? Optimize based on measurements, not hunches.

@@ -1,0 +1,61 @@
+---
+title: React hooks – foundations with practical steps
+slug: react-hooks-foundations
+published: 2026-01-22
+summary: "Beginner-friendly tour of what hooks are, why they exist, and how to start using useState and useEffect with clear examples."
+tags:
+  - react
+  - hooks
+  - beginner
+---
+
+React hooks are plain functions that let function components manage state and lifecycle without switching to class components. Keep three simple rules in mind: call hooks only at the top level of your component (not inside loops or conditions), prefix your own hooks with `use`, and remember that each render gets its own, isolated hook state.
+
+## useState — local UI state
+
+`useState` gives you a state value and a setter. The setter can receive either the new value or a function that receives the previous value, which is safer when multiple updates may happen in quick succession.
+
+```tsx
+import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button onClick={() => setCount((n) => n + 1)}>
+      Clicked {count} times
+    </button>
+  );
+}
+```
+
+The argument passed to `useState` is the initial value. Using a function (`prev => prev + 1`) avoids stale updates when React batches renders.
+
+## useEffect — side effects and synchronization
+
+```tsx
+import { useEffect, useState } from 'react';
+
+function TimeNow() {
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id); // cleanup przy unmount
+  }, []); // [] = uruchom po montażu tylko raz
+
+  return <p>{now.toLocaleTimeString()}</p>;
+}
+```
+
+The second argument (`deps`) tells React when to re-run the effect. Returning a function lets you clean up subscriptions, timers, or listeners when dependencies change or the component unmounts.
+
+## When to reach for these hooks
+
+- `useState` fits any piece of UI state that belongs solely to the component: form fields, toggles, counters.
+- `useEffect` is for syncing the component with something external to the render: timers, network requests, event listeners, document title updates.
+
+## Common pitfalls to avoid
+
+- An empty dependency array with changing values inside the effect usually means you forgot to list dependencies.
+- If an effect should run once but still needs a changing value, split it into two effects or keep the stable value in a `useRef`.

@@ -15,6 +15,6 @@
     "noUncheckedIndexedAccess": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": ["src", "content/**/*.mdx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

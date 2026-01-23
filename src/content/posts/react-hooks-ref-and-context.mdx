@@ -1,0 +1,75 @@
+---
+title: useRef and useContext – state without re-renders and sharing data
+slug: react-hooks-ref-and-context
+published: 2026-01-22
+summary: "An easy explanation of useRef for mutable values and useContext for shared data, with examples that avoid prop drilling."
+tags:
+  - react
+  - hooks
+  - context
+---
+
+## useRef — keep a mutable value without re-rendering
+`useRef` stores a value in `ref.current` that persists across renders but does not trigger a re-render when it changes. That makes it perfect for timers, previous values, or direct DOM access.
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
+
+function Stopwatch() {
+  const start = useRef<number | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (start.current !== null) setElapsed(Date.now() - start.current);
+    }, 100);
+    return () => clearInterval(id);
+  }, []);
+
+  const begin = () => {
+    start.current = Date.now();
+  };
+
+  return (
+    <div>
+      <p>{(elapsed / 1000).toFixed(1)} s</p>
+      <button onClick={begin}>Start</button>
+    </div>
+  );
+}
+```
+Because updating `start.current` does not re-render, the UI stays stable while your timer logic keeps running.
+
+## useContext — share data without prop drilling
+`useContext` lets many components read the same value without threading it through every intermediate component as a prop.
+
+```tsx
+const ThemeContext = createContext<'light' | 'dark'>('light');
+
+function App() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  return (
+    <ThemeContext.Provider value={theme}>
+      <Page onToggle={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))} />
+    </ThemeContext.Provider>
+  );
+}
+
+function Page({ onToggle }: { onToggle: () => void }) {
+  const theme = useContext(ThemeContext);
+  return (
+    <section data-theme={theme}>
+      <button onClick={onToggle}>Switch theme</button>
+    </section>
+  );
+}
+```
+The provider sets the value once, and any descendant can read it with `useContext`.
+
+## When to use them
+- `useRef`: store mutable data that should not cause a re-render (interval IDs, previous props, DOM nodes).
+- `useContext`: provide config, theme, or auth data to many components without passing props down multiple layers.
+
+## Pitfalls to watch for
+- If you mutate an object inside context without changing its reference, consumers will not re-render. Update via state in the Provider so the reference changes.
+- `useRef` is not a replacement for UI state. If the UI must update when a value changes, keep it in `useState` or `useReducer`.

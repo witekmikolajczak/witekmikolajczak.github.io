@@ -1,0 +1,66 @@
+---
+title: useEffect – practical patterns and common mistakes
+slug: react-hooks-effect-patterns
+published: 2026-01-22
+summary: "A practical guide to reasoning about useEffect: dependencies, cleanup, avoiding infinite loops, and knowing when another hook is a better choice."
+tags:
+  - react
+  - hooks
+  - useeffect
+---
+
+## Think in terms of synchronization
+`useEffect` exists to synchronize your component with something outside the render cycle: network calls, browser APIs, or subscriptions. If you only need to derive data from props or state, do it directly in render or with `useMemo` instead of reaching for an effect.
+
+## Dependencies — complete but minimal
+```tsx
+useEffect(() => {
+  document.title = `Count: ${value}`;
+}, [value]); // include everything the effect reads
+```
+List every variable you read inside the effect (except stable refs and constants). Missing dependencies lead to stale data; extra ones can cause unnecessary reruns, so aim for completeness without noise.
+
+## Cleanup — always return the unsubscribe
+```tsx
+useEffect(() => {
+  const onResize = () => setWidth(window.innerWidth);
+  window.addEventListener('resize', onResize);
+  return () => window.removeEventListener('resize', onResize);
+}, []);
+```
+Returning a function lets React clean up listeners, timers, or subscriptions when dependencies change or the component unmounts.
+
+## Avoid effects for pure calculations
+```tsx
+// Bad: using an effect just to derive data
+useEffect(() => setVisible(items.filter(isActive)), [items]);
+
+// Good: derive during render
+const visible = useMemo(() => items.filter(isActive), [items]);
+```
+If the result is purely derived from props/state, keep it in render. Effects are for external synchronization, not for computing values.
+
+## Fetching — a tiny but safe pattern
+```tsx
+useEffect(() => {
+  let alive = true;
+  fetch('/api/user')
+    .then((r) => r.json())
+    .then((data) => alive && setUser(data))
+    .catch(console.error);
+  return () => {
+    alive = false; // prevent setState after unmount
+  };
+}, []);
+```
+Guarding with a flag avoids setting state on an unmounted component if the request finishes late.
+
+## When not to use useEffect
+- Handling a click and updating state in the same render — the event handler is enough.
+- Deriving data from props or state — prefer plain expressions or `useMemo`.
+- Keeping a stable value between renders without triggering re-renders — store it in `useRef`.
+
+## Debug checklist
+- Do dependencies include everything read inside the effect? (let ESLint’s rules-of-hooks guide you)
+- Is there a cleanup for listeners and timers?
+- Is this truly a side effect, or just a calculation that belongs in render?

@@ -1,3 +1,5 @@
+import type { ComponentType } from 'react';
+
 export type ProjectLinkIcon = 'play' | 'npm' | 'globe' | 'link';
 
 export interface ProjectLink {
@@ -34,7 +36,11 @@ export interface BlogPost {
   title: string;
   published: string;
   summary: string;
-  content: string;
+  tags?: string[];
+}
+
+export interface BlogArticle extends BlogPost {
+  Content: ComponentType;
 }
 
 export interface Metric {

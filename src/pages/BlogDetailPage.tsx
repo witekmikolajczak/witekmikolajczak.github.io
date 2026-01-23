@@ -1,13 +1,22 @@
-import { Link, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'flowbite-react';
-import { marked } from 'marked';
 import { motion } from 'framer-motion';
 import { fadeUp, staggerUp } from '../animations';
-import { posts } from '../posts';
+import { allPosts } from '../content';
 
-export default function BlogDetailPage(): JSX.Element {
+export default function BlogDetailPage(): JSX.Element | null {
   const { slug } = useParams<{ slug: string }>();
-  const post = posts.find((item) => item.slug === slug);
+  const post = allPosts.find((item) => item.slug === slug);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!slug) {
+      navigate('/blog', { replace: true });
+    }
+  }, [navigate, slug]);
+
+  if (!slug) return null;
 
   if (!post) {
     return (
@@ -15,9 +24,9 @@ export default function BlogDetailPage(): JSX.Element {
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold">Post not found</h2>
           <p className="text-slate-300">The blog entry you’re looking for does not exist.</p>
-          {/*<Link to="/blog" className="text-accent hover:text-mint">*/}
-          {/*  Back to blog*/}
-          {/*</Link>*/}
+          <Link to="/blog" className="text-accent hover:text-mint">
+            Back to blog
+          </Link>
         </section>
       </main>
     );
@@ -47,15 +56,9 @@ export default function BlogDetailPage(): JSX.Element {
           </Link>
         </motion.div>
         <motion.article className="card-sheen rounded-2xl px-4 py-5" variants={fadeUp}>
-          <div
-            className="markdown"
-            dangerouslySetInnerHTML={{
-              __html: (() => {
-                const parsed = marked.parse(post.content);
-                return typeof parsed === 'string' ? parsed : '';
-              })(),
-            }}
-          />
+          <div className="markdown">
+            <post.Content />
+          </div>
         </motion.article>
       </motion.section>
     </main>

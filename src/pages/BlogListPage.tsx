@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import SectionHeader from '../components/SectionHeader';
 import BlogCard from '../components/BlogCard';
 import { staggerUp } from '../animations';
-import { posts } from '../posts';
+import { allPosts } from '../content';
 
 export default function BlogListPage(): JSX.Element {
   return (
@@ -17,10 +17,10 @@ export default function BlogListPage(): JSX.Element {
         <SectionHeader
           eyebrow="Blog"
           title="Good practices in development"
-          description="Posts live in `src/posts.ts` as markdown strings, parsed client-side."
+          description="MDX posts with typed frontmatter and highlighted code snippets."
         />
         <div className="grid gap-4 md:grid-cols-2">
-          {posts.map((post) => (
+          {allPosts.map((post) => (
             <BlogCard key={post.slug} post={post} />
           ))}
         </div>
